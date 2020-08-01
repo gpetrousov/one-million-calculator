@@ -39,8 +39,8 @@ def main(monthly_input, annual_increase, annual_percentage_growth, amount_of_yea
     annual_input = monthly_input * 12
     monthly_percentage_growth = float(annual_percentage_growth/12)
 
-    annual_simulation_table_headers = ["Year", "Total amount invested", "Total investment value", "Investment returns"]
-    monthly_simulation_table_headers = ["Date (Month/Year)", "Total amount invested", "Total investment value", "Investment returns"]
+    annual_simulation_table_headers = ["Year", "Yearly input", "Total amount invested", "Total investment value", "Investment returns"]
+    monthly_simulation_table_headers = ["Date (Month/Year)", "Monthly input", "Total amount invested", "Total investment value", "Investment returns"]
 
     simulation_table = []
 
@@ -58,13 +58,14 @@ def main(monthly_input, annual_increase, annual_percentage_growth, amount_of_yea
                 investments_returns = total_investment_value - total_amount_invested
 
                 end_date = "{}/{}".format(month, year)
-                simulation_table.append([end_date, total_amount_invested, round(total_investment_value, 2),  round(investments_returns, 2)])
+                simulation_table.append([end_date, monthly_input, total_amount_invested, round(total_investment_value, 2),  round(investments_returns, 2)])
 
             starting_month = 1
             simulation_table.append([YEARLY_SEPARATOR, YEARLY_SEPARATOR, YEARLY_SEPARATOR, YEARLY_SEPARATOR])
             monthly_input += monthly_input * annual_increase
 
         print(tabulate(simulation_table, headers=monthly_simulation_table_headers, tablefmt="fancy_grid", floatfmt=".2f"))
+        write_results_into_csv(monthly_simulation_table_headers, simulation_table)
 
     elif results_detail == "ye":
         for year in range(starting_year, starting_year+amount_of_years):
@@ -75,15 +76,12 @@ def main(monthly_input, annual_increase, annual_percentage_growth, amount_of_yea
 
             investments_returns = total_investment_value - total_amount_invested
 
-            simulation_table.append([year, total_amount_invested, round(total_investment_value, 2),  round(investments_returns, 2)])
+            simulation_table.append([year, annual_input, total_amount_invested, round(total_investment_value, 2),  round(investments_returns, 2)])
 
             annual_input += annual_input * annual_increase
 
         print(tabulate(simulation_table, headers=annual_simulation_table_headers, tablefmt="fancy_grid", floatfmt=".2f"))
-
-
-
-    write_results_into_csv(monthly_simulation_table_headers, simulation_table)
+        write_results_into_csv(annual_simulation_table_headers, simulation_table)
 
 
 if __name__ == "__main__":
